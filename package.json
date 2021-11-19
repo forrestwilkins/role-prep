@@ -1,8 +1,8 @@
 {
-  "name": "nestjs-blog",
+  "name": "role-prep",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Full stack application built with Next.js, NestJS, TypeScript, and Prisma.",
+  "author": "Forrest Wilkins",
   "private": true,
   "license": "GPL-3.0",
   "scripts": {
