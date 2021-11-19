@@ -1,7 +1,7 @@
 import { pluralize } from "../utils/items";
 
 const en = {
-  brand: () => "nextjs-nestjs",
+  brand: () => "role-prep",
 
   actions: {
     add: () => "Add",
