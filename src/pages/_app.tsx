@@ -2,6 +2,8 @@ import { Provider } from "react-redux";
 import type { AppProps } from "next/app";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
 
 import createEmotionCache from "../utils/createEmotionCache";
 import Layout from "../components/_App/Layout";
@@ -10,8 +12,9 @@ import store from "../store";
 
 const clientSideEmotionCache = createEmotionCache();
 const queryClient = new QueryClient();
+const persistor = persistStore(store);
 
-interface AppPropsWithEmotionCache extends AppProps {
+interface Props extends AppProps {
   emotionCache?: EmotionCache;
 }
 
@@ -19,15 +22,17 @@ const App = ({
   emotionCache = clientSideEmotionCache,
   Component,
   pageProps,
-}: AppPropsWithEmotionCache) => (
+}: Props) => (
   <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <CacheProvider value={emotionCache}>
-        <Layout {...pageProps}>
-          <Component {...pageProps} />
-        </Layout>
-      </CacheProvider>
-    </QueryClientProvider>
+    <PersistGate persistor={persistor}>
+      <QueryClientProvider client={queryClient}>
+        <CacheProvider value={emotionCache}>
+          <Layout {...pageProps}>
+            <Component {...pageProps} />
+          </Layout>
+        </CacheProvider>
+      </QueryClientProvider>
+    </PersistGate>
   </Provider>
 );
 

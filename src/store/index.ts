@@ -1,12 +1,16 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import { counterReducer } from "./counter";
-import { kanyeReducer } from "./kanye";
+import { currentUserReducer } from "./currentUser";
 
 const store = configureStore({
   reducer: {
+    currentUser: currentUserReducer,
     counter: counterReducer,
-    kanye: kanyeReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type AppDispatch = typeof store.dispatch;

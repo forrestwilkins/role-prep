@@ -1,9 +1,9 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { decrement, increment, incrementByAmount } from "./actions";
 
-type CounterState = {
+export interface CounterState {
   value: number;
-};
+}
 
 const initialState: CounterState = {
   value: 0,

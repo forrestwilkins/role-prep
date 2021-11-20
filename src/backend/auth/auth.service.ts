@@ -3,6 +3,7 @@
 import { User as UserModel } from ".prisma/client";
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { CurrentUser } from "../../store/currentUser";
 import { UsersService } from "../users/users.service";
 
 @Injectable()
@@ -24,8 +25,8 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async login({ id, name }: UserModel): Promise<CurrentUser> {
+    const payload = { username: name, sub: id };
     return {
       access_token: this.jwtService.sign(payload),
     };
