@@ -27,7 +27,9 @@ export enum NavigationPaths {
 export enum FieldNames {
   Body = "body",
   Description = "description",
+  Email = "email",
   Name = "name",
+  Password = "password",
   Query = "query",
 }
 
