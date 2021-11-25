@@ -1,5 +1,6 @@
 export const API_ROOT = "/api";
 export const SWAGGER_JSON = "swagger-json";
+export const DEFAULT_DB = "postgres";
 
 export enum ResourceNames {
   Events = "events",
