@@ -9,9 +9,9 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { Comment as CommentModel } from "@prisma/client";
 import { DeleteResult, Like, UpdateResult } from "typeorm";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { CommentEntity } from "../comments/comment.entity";
 import { CommentsService } from "../comments/comments.service";
 import { PostEntity } from "./post.entity";
 import { PostsService } from "./posts.service";
@@ -35,11 +35,9 @@ export class PostsController {
   }
 
   @Get(":id/comments")
-  async getCommentsByPostId(@Param("id") id: string): Promise<CommentModel[]> {
+  async getCommentsByPostId(@Param("id") id: string): Promise<CommentEntity[]> {
     return this.commentsService.comments({
-      where: {
-        postId: Number(id),
-      },
+      where: { postId: Number(id) },
     });
   }
 

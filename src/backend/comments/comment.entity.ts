@@ -7,16 +7,13 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { CommentEntity } from "../comments/comment.entity";
+import { PostEntity } from "../posts/post.entity";
 import { UserEntity } from "../users/user.entity";
 
 @Entity()
-export class PostEntity {
+export class CommentEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  title: string;
 
   @Column()
   body: string;
@@ -24,8 +21,14 @@ export class PostEntity {
   @ManyToOne(() => UserEntity, (user) => user.posts)
   user: UserEntity;
 
-  @OneToMany(() => CommentEntity, (comment) => comment.post)
-  comments: CommentEntity[];
+  @ManyToOne(() => PostEntity, (post) => post.comments)
+  post: PostEntity;
+
+  @ManyToOne(() => CommentEntity, (comment) => comment.replies)
+  comment: CommentEntity;
+
+  @OneToMany(() => CommentEntity, (comment) => comment.comment)
+  replies: CommentEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

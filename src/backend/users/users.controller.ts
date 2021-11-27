@@ -14,11 +14,15 @@ import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { PostEntity } from "../posts/post.entity";
 import { UsersService } from "./users.service";
 import { UserEntity } from "./user.entity";
+import { PostsService } from "../posts/posts.service";
 
 @ApiTags("users")
 @Controller("users")
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly postsService: PostsService
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -33,11 +37,9 @@ export class UsersController {
 
   @Get(":id/posts")
   async getPosts(@Param("id") id: string): Promise<PostEntity[]> {
-    const userWithPosts = await this.usersService.user({
-      where: { id: Number(id) },
-      relations: ["posts"],
+    return this.postsService.posts({
+      where: { userId: Number(id) },
     });
-    return userWithPosts.posts;
   }
 
   // TODO: Log in user with AuthService on sign up
