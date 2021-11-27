@@ -7,7 +7,7 @@ import { PrismaService } from "../../prisma/prisma.service";
 import { UsersController } from "../users.controller";
 import { UsersService } from "../users.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "../user.entity";
+import { UserEntity } from "../user.entity";
 
 describe("UsersController", () => {
   let usersService: UsersService;
@@ -15,7 +15,10 @@ describe("UsersController", () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(), TypeOrmModule.forFeature([User])],
+      imports: [
+        TypeOrmModule.forRoot(),
+        TypeOrmModule.forFeature([UserEntity]),
+      ],
       providers: [UsersService, PostsService, PrismaService],
       controllers: [UsersController],
     }).compile();

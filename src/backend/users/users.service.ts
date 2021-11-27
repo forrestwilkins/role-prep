@@ -7,37 +7,39 @@ import {
   Repository,
   UpdateResult,
 } from "typeorm";
-import { User } from "./user.entity";
+import { UserEntity } from "./user.entity";
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>
   ) {}
 
-  async user(where: FindConditions<User>): Promise<User | null> {
+  async user(where: FindConditions<UserEntity>): Promise<UserEntity | null> {
     return this.usersRepository.findOne({ where });
   }
 
-  async users(params: { where?: FindManyOptions<User> }): Promise<User[]> {
+  async users(params: {
+    where?: FindManyOptions<UserEntity>;
+  }): Promise<UserEntity[]> {
     const { where } = params;
     return this.usersRepository.find({ where });
   }
 
-  async createUser(data: Partial<User>): Promise<User> {
+  async createUser(data: Partial<UserEntity>): Promise<UserEntity> {
     return this.usersRepository.create(data);
   }
 
   async updateUser(params: {
-    where: FindConditions<User>;
-    data: Partial<User>;
+    where: FindConditions<UserEntity>;
+    data: Partial<UserEntity>;
   }): Promise<UpdateResult> {
     const { where, data } = params;
     return this.usersRepository.update(where, data);
   }
 
-  async deleteUser(where: FindConditions<User>): Promise<DeleteResult> {
+  async deleteUser(where: FindConditions<UserEntity>): Promise<DeleteResult> {
     return this.usersRepository.delete(where);
   }
 }
