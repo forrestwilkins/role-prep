@@ -4,6 +4,7 @@ import {
   DeleteResult,
   FindConditions,
   FindManyOptions,
+  FindOneOptions,
   Repository,
   UpdateResult,
 } from "typeorm";
@@ -16,15 +17,14 @@ export class UsersService {
     private usersRepository: Repository<UserEntity>
   ) {}
 
-  async user(where: FindConditions<UserEntity>): Promise<UserEntity | null> {
-    return this.usersRepository.findOne({ where });
+  async user(options: FindOneOptions<UserEntity>): Promise<UserEntity | null> {
+    return this.usersRepository.findOne(options);
   }
 
   async users(params: {
-    where?: FindManyOptions<UserEntity>;
+    options?: FindManyOptions<UserEntity>;
   }): Promise<UserEntity[]> {
-    const { where } = params;
-    return this.usersRepository.find({ where });
+    return this.usersRepository.find(params.options);
   }
 
   async createUser(data: Partial<UserEntity>): Promise<UserEntity> {

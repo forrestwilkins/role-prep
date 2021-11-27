@@ -8,46 +8,43 @@ import {
   Controller,
   UseGuards,
 } from "@nestjs/common";
-import { User as UserModel, Post as PostModel } from "@prisma/client";
-import { UsersService } from "./users.service";
-import { PostsService } from "../posts/posts.service";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { ApiTags } from "@nestjs/swagger";
 import { DeleteResult, UpdateResult } from "typeorm";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { PostEntity } from "../posts/post.entity";
+import { UsersService } from "./users.service";
+import { UserEntity } from "./user.entity";
 
 @ApiTags("users")
 @Controller("users")
 export class UsersController {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly postsService: PostsService
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getUsers(): Promise<UserModel[]> {
+  async getUsers(): Promise<UserEntity[]> {
     return this.usersService.users({});
   }
 
   @Get(":id")
-  async getUserById(@Param("id") id: string): Promise<UserModel> {
-    return this.usersService.user({ id: Number(id) });
+  async getUserById(@Param("id") id: string): Promise<UserEntity> {
+    return this.usersService.user({ where: { id: Number(id) } });
   }
 
   @Get(":id/posts")
-  async getPosts(@Param("id") id: string): Promise<PostModel[]> {
-    return this.postsService.posts({
-      where: {
-        userId: Number(id),
-      },
+  async getPosts(@Param("id") id: string): Promise<PostEntity[]> {
+    const userWithPosts = await this.usersService.user({
+      where: { id: Number(id) },
+      relations: ["posts"],
     });
+    return userWithPosts.posts;
   }
 
   // TODO: Log in user with AuthService on sign up
   @Post()
   async signupUser(
     @Body() userData: { name: string; password: string }
-  ): Promise<UserModel> {
+  ): Promise<UserEntity> {
     return this.usersService.createUser(userData);
   }
 

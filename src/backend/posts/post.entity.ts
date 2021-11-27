@@ -4,23 +4,23 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  ManyToOne,
 } from "typeorm";
-import { PostEntity } from "../posts/post.entity";
+import { UserEntity } from "../users/user.entity";
 
 @Entity()
-export class UserEntity {
+export class PostEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
+  title: string;
 
   @Column()
-  password: string;
+  body: string;
 
-  @OneToMany(() => PostEntity, (post) => post.user)
-  posts: PostEntity[];
+  @ManyToOne(() => UserEntity, (user) => user.posts)
+  user: UserEntity;
 
   @CreateDateColumn()
   createdAt: Date;
