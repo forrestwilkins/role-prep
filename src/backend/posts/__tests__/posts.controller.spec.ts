@@ -1,13 +1,15 @@
-// TODO: Get NestJS tests passing with TypeORM
+// TODO: Remove all use of Prisma
 
 import { Test } from "@nestjs/testing";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { Post as PostModel } from ".prisma/client";
 import { CommentsService } from "../../comments/comments.service";
 import { PrismaService } from "../../prisma/prisma.service";
 import { PostsController } from "../posts.controller";
 import { PostsService } from "../posts.service";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { PostEntity } from "../post.entity";
+import { DEFAULT_DB } from "../../../constants/common";
+import { CommentEntity } from "../../comments/comment.entity";
 
 describe("PostsController", () => {
   let postsService: PostsService;
@@ -16,8 +18,18 @@ describe("PostsController", () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot(),
-        TypeOrmModule.forFeature([PostEntity]),
+        TypeOrmModule.forRoot({
+          type: DEFAULT_DB,
+          host: process.env.DB_HOST,
+          port: Number(process.env.DB_PORT),
+          username: process.env.DB_USERNAME,
+          database: process.env.TEST_DB_NAME,
+          entities: ["./**/*.entity.ts"],
+          keepConnectionAlive: true,
+          synchronize: false,
+        }),
+
+        TypeOrmModule.forFeature([PostEntity, CommentEntity]),
       ],
       controllers: [PostsController],
       providers: [PostsService, CommentsService, PrismaService],
@@ -28,7 +40,7 @@ describe("PostsController", () => {
   });
 
   describe("getPosts", () => {
-    it.skip("should return an array of posts", async () => {
+    it("should return an array of posts", async () => {
       const result: PostModel[] = [
         {
           id: 1,
@@ -56,7 +68,7 @@ describe("PostsController", () => {
   });
 
   describe("getPostById", () => {
-    it.skip("should return a single post", async () => {
+    it("should return a single post", async () => {
       const result: PostModel = {
         id: 1,
         userId: 1,

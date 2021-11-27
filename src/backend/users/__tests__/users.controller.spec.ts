@@ -1,12 +1,14 @@
-// TODO: Get NestJS tests passing with TypeORM
+// TODO: Remove all use of Prisma
 
 import { Test } from "@nestjs/testing";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { User as UserModel } from ".prisma/client";
 import { PostsService } from "../../posts/posts.service";
 import { PrismaService } from "../../prisma/prisma.service";
+import { DEFAULT_DB } from "../../../constants/common";
 import { UsersController } from "../users.controller";
+import { PostEntity } from "../../posts/post.entity";
 import { UsersService } from "../users.service";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "../user.entity";
 
 describe("UsersController", () => {
@@ -16,8 +18,18 @@ describe("UsersController", () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot(),
-        TypeOrmModule.forFeature([UserEntity]),
+        TypeOrmModule.forRoot({
+          type: DEFAULT_DB,
+          host: process.env.DB_HOST,
+          port: Number(process.env.DB_PORT),
+          username: process.env.DB_USERNAME,
+          database: process.env.TEST_DB_NAME,
+          entities: ["./**/*.entity.ts"],
+          keepConnectionAlive: true,
+          synchronize: false,
+        }),
+
+        TypeOrmModule.forFeature([UserEntity, PostEntity]),
       ],
       providers: [UsersService, PostsService, PrismaService],
       controllers: [UsersController],
@@ -28,7 +40,7 @@ describe("UsersController", () => {
   });
 
   describe("getUsers", () => {
-    it.skip("should return an array of users", async () => {
+    it("should return an array of users", async () => {
       const result: UserModel[] = [
         {
           id: 1,
@@ -54,7 +66,7 @@ describe("UsersController", () => {
   });
 
   describe("getUserById", () => {
-    it.skip("should return a single user", async () => {
+    it("should return a single user", async () => {
       const result: UserModel = {
         id: 1,
         name: "name1",
