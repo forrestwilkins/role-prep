@@ -7,6 +7,6 @@ export default {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [],
+  entities: ["src/backend/**/**.entity.ts"],
   synchronize: process.env.NODE_ENV === Environments.Development,
 };

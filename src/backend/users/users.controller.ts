@@ -13,6 +13,7 @@ import { UsersService } from "./users.service";
 import { PostsService } from "../posts/posts.service";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { ApiTags } from "@nestjs/swagger";
+import { DeleteResult, UpdateResult } from "typeorm";
 
 @ApiTags("users")
 @Controller("users")
@@ -55,7 +56,7 @@ export class UsersController {
   async updateUser(
     @Param() { id }: { id: string },
     @Body() userData: { name: string; password: string }
-  ): Promise<UserModel> {
+  ): Promise<UpdateResult> {
     return this.usersService.updateUser({
       where: {
         id: Number(id),
@@ -66,7 +67,7 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(":id")
-  async deleteUser(@Param("id") id: string): Promise<UserModel> {
+  async deleteUser(@Param("id") id: string): Promise<DeleteResult> {
     return this.usersService.deleteUser({ id: Number(id) });
   }
 }

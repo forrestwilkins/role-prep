@@ -1,46 +1,43 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
-import { User as UserModel, Prisma } from "@prisma/client";
+import { InjectRepository } from "@nestjs/typeorm";
+import {
+  DeleteResult,
+  FindConditions,
+  FindManyOptions,
+  Repository,
+  UpdateResult,
+} from "typeorm";
+import { User } from "./user.entity";
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>
+  ) {}
 
-  async user(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput
-  ): Promise<UserModel | null> {
-    return this.prisma.user.findUnique({
-      where: userWhereUniqueInput,
-    });
+  async user(where: FindConditions<User>): Promise<User | null> {
+    return this.usersRepository.findOne({ where });
   }
 
-  async users(params: { where?: Prisma.UserWhereInput }): Promise<UserModel[]> {
+  async users(params: { where?: FindManyOptions<User> }): Promise<User[]> {
     const { where } = params;
-    return this.prisma.user.findMany({
-      where,
-    });
+    return this.usersRepository.find({ where });
   }
 
-  async createUser(data: Prisma.UserCreateInput): Promise<UserModel> {
-    return this.prisma.user.create({
-      data,
-    });
+  async createUser(data: Partial<User>): Promise<User> {
+    return this.usersRepository.create(data);
   }
 
   async updateUser(params: {
-    where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
-  }): Promise<UserModel> {
+    where: FindConditions<User>;
+    data: Partial<User>;
+  }): Promise<UpdateResult> {
     const { where, data } = params;
-    return this.prisma.user.update({
-      data,
-      where,
-    });
+    return this.usersRepository.update(where, data);
   }
 
-  async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<UserModel> {
-    return this.prisma.user.delete({
-      where,
-    });
+  async deleteUser(where: FindConditions<User>): Promise<DeleteResult> {
+    return this.usersRepository.delete(where);
   }
 }
