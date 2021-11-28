@@ -8,7 +8,7 @@ const config: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: ["dist/src/**/*.entity{.ts,.js}"],
+  entities: ["src/**/*.entity{.ts,.js}"],
   synchronize: process.env.NODE_ENV === Environments.Development,
   keepConnectionAlive: true,
 };
