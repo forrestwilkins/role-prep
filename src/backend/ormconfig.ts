@@ -1,5 +1,8 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { DEFAULT_DB, Environments } from "../constants/common";
+import { CommentEntity } from "./comments/comment.entity";
+import { PostEntity } from "./posts/post.entity";
+import { UserEntity } from "./users/user.entity";
 
 const config: TypeOrmModuleOptions = {
   type: DEFAULT_DB,
@@ -8,9 +11,10 @@ const config: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: ["src/**/*.entity{.ts,.js}"],
+  entities: [UserEntity, PostEntity, CommentEntity],
   synchronize: process.env.NODE_ENV === Environments.Development,
   keepConnectionAlive: true,
+  autoLoadEntities: true,
 };
 
 export default config;

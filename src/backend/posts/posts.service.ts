@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import {
   DeleteResult,
   FindConditions,
@@ -8,7 +9,6 @@ import {
   UpdateResult,
 } from "typeorm";
 import { PostEntity } from "./post.entity";
-import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class PostsService {
