@@ -11,7 +11,6 @@ const config: TypeOrmModuleOptions = {
   entities: ["dist/src/**/*.entity{.ts,.js}"],
   synchronize: process.env.NODE_ENV === Environments.Development,
   keepConnectionAlive: true,
-  autoLoadEntities: true,
 };
 
 export default config;
