@@ -17,7 +17,7 @@ export class AuthService {
     name: string,
     password: string
   ): Promise<Partial<UserModel>> {
-    const user = await this.usersService.user({ name });
+    const user = await this.usersService.user({ where: { name } });
     if (user && user.password === password) {
       const { password: _password, ...result } = user;
       return result;

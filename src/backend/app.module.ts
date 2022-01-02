@@ -1,13 +1,21 @@
 import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
-import { CommentsModule } from "./comments/comments.module";
 import { PostsModule } from "./posts/posts.module";
-import { PrismaModule } from "./prisma/prisma.module";
 import { UsersModule } from "./users/users.module";
+import { CommentsModule } from "./comments/comments.module";
+import config from "./ormconfig";
 
 @Module({
-  imports: [UsersModule, PostsModule, CommentsModule, AuthModule, PrismaModule],
+  imports: [
+    TypeOrmModule.forRoot(config),
+
+    AuthModule,
+    UsersModule,
+    PostsModule,
+    CommentsModule,
+  ],
   providers: [AppService],
 })
 export class AppModule {}

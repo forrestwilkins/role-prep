@@ -1,4 +1,4 @@
-// TODO: Catch all function needs to be refactoed. Promise executor functions should not be async.
+// TODO: Catch all function needs to be refactored. Promise executor functions should not be async.
 // https://docs.w3cub.com/eslint/rules/no-async-promise-executor
 // https://eslint.org/docs/rules/no-async-promise-executor
 

@@ -4,6 +4,9 @@ import { PostsModule } from "../posts.module";
 import { PostsService } from "../posts.service";
 import { INestApplication } from "@nestjs/common";
 import { PrismaModule } from "../../prisma/prisma.module";
+import { CommentsModule } from "../../comments/comments.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { DEFAULT_DB } from "../../../constants/common";
 
 const NOW = new Date().toDateString();
 
@@ -32,7 +35,21 @@ describe("Posts", () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [PostsModule, PrismaModule],
+      imports: [
+        TypeOrmModule.forRoot({
+          type: DEFAULT_DB,
+          host: process.env.DB_HOST,
+          port: Number(process.env.DB_PORT),
+          username: process.env.DB_USERNAME,
+          database: process.env.TEST_DB_NAME,
+          entities: ["./**/*.entity.ts"],
+          synchronize: false,
+        }),
+
+        PostsModule,
+        CommentsModule,
+        PrismaModule,
+      ],
     })
       .overrideProvider(PostsService)
       .useValue(postsService)
